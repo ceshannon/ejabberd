@@ -25,6 +25,8 @@
 {pam, @pam@}.
 {zlib, @zlib@}.
 {riak, @riak@}.
+{mongodb, @mongodb@}.
+{eredis, @redis@}.
 {json, @json@}.
 {lager, @lager@}.
 {iconv, @iconv@}.

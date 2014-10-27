@@ -93,6 +93,11 @@ CfgDeps = lists:flatmap(
                     [{riakc, ".*",
 		      {git, "git://github.com/basho/riak-erlang-client",
 		       {tag, "1.4.2"}}}];
+	       ({mongodb, true}) -> 
+		    [{mongodb, ".*", 
+		      {git, "git://github.com/mongodb/mongodb-erlang.git"}}];
+	       ({eredis, true}) ->
+		     [{eredis, ".*", {git, "git://github.com/wooga/eredis.git", "master"}}];
                ({json, true}) ->
                     [{jiffy, ".*", {git, "git://github.com/davisp/jiffy"}}];
                ({iconv, true}) ->
