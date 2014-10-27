@@ -18,7 +18,7 @@
 -include("ejabberd.hrl").
 -include("logger.hrl").
 
--define(USER_TOKEN, <<"lc_user_token:">>).
+-define(USER_TOKEN, <<"tt_user_token:">>).
 
 %%%----------------------------------------------------------------------
 %%% API
