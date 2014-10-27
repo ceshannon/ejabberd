@@ -19,7 +19,7 @@
 
 -define(SUPERVISOR, ejabberd_sup).
 
--export([process/2, construct_event/5]).
+-export([process/2, construct_event/3]).
 
 -export([start_link/2]).
 
@@ -70,7 +70,7 @@ handle_call({pubmsg, ReqToken, Data}, _From, #state{host = Host, token = Token} 
 	    Users = ejabberd_sm:get_vh_session_list(Host),
 	    lists:foreach(fun(To) ->
 				  Packet = construct_event(FromJid, To, Data),
-				  ejabberd_router:route(FromJid, ToJid, Packet);				  
+				  ejabberd_router:route(FromJid, To, Packet)
 			     end, Users),
 	    {reply, {ok, published}, State};
 	_ ->
@@ -125,26 +125,6 @@ construct_event(F, T, Event) ->
 
 get_proc_name(Host) -> gen_mod:get_module_proc(Host, ?PROCNAME).
 
-json_to_model(JsonList) ->
-    case lists:sort(JsonList) of
-	[{<<"body">>, {Body}},{<<"client">>, Client},{<<"from">>, {From}},{<<"style">>, Style}, {<<"to">>, {To}}, {<<"type">>, Type}] ->
-	    {ToType, ToId, To2} = parse_to(To),
-	    {FromType, FromId, From2} = parse_from(From),
-	    M = {
-	      from, From2,
-	      to, To2,
-	      type, Type,
-	      body, parse_body(Body),
-	      is_deleted, 0,
-	      style, Style,
-	      client, Client,
-	      created_at, jlib:get_now_utc()
-	     },
-	    {ToType, ToId, FromType, FromId,  M}; 
-	_ ->
-	    undefined
-    end.
-
 parse_body(Body) ->
     case lists:keytake(<<"entity">>, 1, Body) of
 	{value, {<<"entity">>, {E}}, S} when is_list(E)->
@@ -181,7 +161,6 @@ parse_to(To) ->
 	    {undefined, undefined, To}
     end.
 
-get_members() ->    
     
 			
     
